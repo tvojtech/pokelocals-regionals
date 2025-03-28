@@ -1,3 +1,4 @@
+import { PlayerStat } from "~/types";
 import { categorizeDeck } from "./categorize-deck";
 import { tournaments } from "./files";
 import fs from "fs";
@@ -9,7 +10,7 @@ const players = tournaments
   //   ({ player }) => player.firstName === "gabriel" && player.surname === "f."
   // )
   .map(({ player, decklist }) => ({
-    playerName: `${player.firstName} ${player.surname} (${player.country})`,
+    playerKey: `${player.firstName}-${player.surname}-${player.country}-${player.popid ?? ""}`,
     deck: categorizeDeck(decklist),
     player,
     decklist,
@@ -17,11 +18,15 @@ const players = tournaments
   .reduce(
     (acc, next) => ({
       ...acc,
-      [next.playerName]: [...(acc[next.playerName] ?? []), next.deck],
+      [next.playerKey]: {
+        player: next.player,
+        archetypes: [...(acc[next.playerKey]?.archetypes ?? []), next.deck],
+      },
     }),
-    {} as Record<string, string[]>
+    {} as Record<
+      string,
+      { player: Omit<PlayerStat, "decklistUrl">; archetypes: string[] }
+    >
   );
 
-fs.writeFileSync("./data/players.json", JSON.stringify(players));
-
-console.log(players);
+fs.writeFileSync("./data/players.json", JSON.stringify(Object.values(players)));

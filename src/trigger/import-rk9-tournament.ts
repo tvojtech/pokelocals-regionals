@@ -60,6 +60,7 @@ export const importRk9Tournament = schemaTask({
         const playerStat = playerStatObjects[decklist.url];
         return {
           player: {
+            popid: playerStat.popid,
             firstName: playerStat.firstName,
             surname: playerStat.surname,
             country: playerStat.country,

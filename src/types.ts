@@ -1,4 +1,5 @@
 export type PlayerStat = {
+  popid?: string;
   firstName: string;
   surname: string;
   country: string;
