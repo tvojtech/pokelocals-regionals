@@ -1,16 +1,29 @@
+import { ImportRk9TournamentTaskResult } from "~/types";
 import { categorizeDeck } from "./categorize-deck";
-import stockholm2025 from "../data/stockholm-2025-decks.json";
+import { tournaments } from "./files";
+import fs from "fs";
 
-const { tournament, players } = stockholm2025;
+const computeMeta = (
+  division: string,
+  players: ImportRk9TournamentTaskResult["players"]
+) =>
+  players
+    .filter(({ player }) => player.division === division)
+    .map((player) => player.decklist)
+    .map(categorizeDeck)
+    .reduce(
+      (acc, deck) => {
+        return { ...acc, [deck]: (acc[deck] ?? 0) + 1 };
+      },
+      {} as Record<string, number>
+    );
 
-const metaShare = players
-  .map((player) => player.decklist)
-  .map(categorizeDeck)
-  .reduce(
-    (acc, deck) => {
-      return { ...acc, [deck]: (acc[deck] ?? 0) + 1 };
-    },
-    {} as Record<string, number>
-  );
+const meta = tournaments.map((tournament) => ({
+  tournament: tournament.tournament,
+  meta: {
+    juniors: computeMeta("Junior", tournament.players),
+    seniors: computeMeta("Senior", tournament.players),
+  },
+}));
 
-console.log(metaShare);
+fs.writeFileSync("./data/metashare.json", JSON.stringify(meta));

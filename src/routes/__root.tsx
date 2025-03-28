@@ -1,5 +1,6 @@
 import {
   HeadContent,
+  Link,
   Outlet,
   Scripts,
   createRootRoute,
@@ -9,6 +10,7 @@ import * as React from "react";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
 import { NotFound } from "~/components/NotFound";
 import appCss from "~/styles/app.css?url";
+import globalsCss from "~/styles/globals.css?url";
 import { seo } from "~/utils/seo";
 
 export const Route = createRootRoute({
@@ -29,6 +31,7 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "stylesheet", href: globalsCss },
       {
         rel: "apple-touch-icon",
         sizes: "180x180",
@@ -75,8 +78,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
-        {/* <div className="p-2 flex gap-2 text-lg">
+      <body className="px-8">
+        <div className="p-2 flex gap-2 text-lg">
           <Link
             to="/"
             activeProps={{
@@ -84,19 +87,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             }}
             activeOptions={{ exact: true }}
           >
-            Home
+            Meta
           </Link>
           <Link
-            to="/"
+            to="/players"
             activeProps={{
               className: "font-bold",
             }}
           >
-            A
+            Player search
           </Link>
         </div>
-        <hr /> */}
-        {children}
+        <div className="p-2">{children}</div>
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
       </body>
