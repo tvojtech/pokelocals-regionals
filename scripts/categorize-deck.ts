@@ -105,14 +105,14 @@ export function categorizeDeck(
   }
 
   if (cards.some((card) => card.cardName === "klawf" && card.quantity >= 3)) {
-    return "Klafw";
+    return "Klawf";
   }
 
   if (
     cards.some((card) => card.cardName === "klawf") &&
     cards.some((card) => card.cardName === "terapagos ex")
   ) {
-    return "Klafw_Terapagos";
+    return "Klawf_Terapagos";
   }
 
   if (
