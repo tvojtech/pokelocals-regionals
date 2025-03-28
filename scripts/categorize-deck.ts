@@ -64,7 +64,9 @@ export function categorizeDeck(
     cards.some(
       (card) =>
         card.cardName === "comfey" &&
-        card.setNumbers.every((set) => set === "lor" || set === "crz") &&
+        card.setNumbers.every(
+          (set) => set.startsWith("lor") || set === "pr-swsh242"
+        ) &&
         card.quantity > 1
     )
   ) {
@@ -75,7 +77,7 @@ export function categorizeDeck(
     cards.some(
       (card) =>
         card.cardName === "snorlax" &&
-        card.setNumbers.every((set) => set === "pgo") &&
+        card.setNumbers.every((set) => set.startsWith("pgo")) &&
         card.quantity > 1
     )
   ) {
@@ -86,7 +88,9 @@ export function categorizeDeck(
     cards.some(
       (card) =>
         card.cardName === "pidgeot ex" &&
-        card.setNumbers.every((set) => set === "obf") &&
+        card.setNumbers.every(
+          (set) => set.startsWith("obf") || set.startsWith("paf")
+        ) &&
         card.quantity > 1
     ) &&
     cards.some((card) => card.cardName === "luxray v")

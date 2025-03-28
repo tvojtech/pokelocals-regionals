@@ -7,7 +7,7 @@ const players = tournaments
   .map((tournament) => tournament.players)
   .flat()
   // .filter(
-  //   ({ player }) => player.firstName === "gabriel" && player.surname === "f."
+  //   ({ player }) => player.firstName === "Oliver" && player.surname === "V."
   // )
   .map(({ player, decklist }) => ({
     playerKey: `${player.firstName}-${player.surname}-${player.country}-${player.popid ?? ""}`,
