@@ -139,5 +139,41 @@ export function categorizeDeck(
     return "Ancient_box";
   }
 
+  if (
+    cards.some((card) => card.cardName === "ceruledge ex" && card.quantity >= 3)
+  ) {
+    return "Ceruledge";
+  }
+
+  if (
+    cards.some(
+      (card) => card.cardName === "gouging fire ex" && card.quantity >= 3
+    )
+  ) {
+    return "Gouging_Fire";
+  }
+
+  if (cards.some((card) => card.cardName === "chien pao ex")) {
+    return "Chien_Pao";
+  }
+
+  if (cards.some((card) => card.cardName === "milotic ex")) {
+    return "Milotic_wall";
+  }
+
+  if (
+    cards.some(
+      (card) => card.cardName === "iron thorns ex" && card.quantity >= 3
+    )
+  ) {
+    return "Iron_thorns";
+  }
+
+  if (
+    cards.some((card) => card.cardName === "feraligatr" && card.quantity >= 2)
+  ) {
+    return "Feraligatr";
+  }
+
   return "Other";
 }
