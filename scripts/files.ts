@@ -6,7 +6,7 @@ import stockholm2025 from "../data/stockholm-2025-decks.json";
 
 export const tournaments: ImportRk9TournamentTaskResult[] = [
   stockholm2025,
-  euic2025,
-  fortaleza2025,
   vancouver2025,
+  fortaleza2025,
+  euic2025,
 ];
