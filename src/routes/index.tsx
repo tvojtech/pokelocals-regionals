@@ -1,5 +1,6 @@
 import chroma from "chroma-js";
 import { createFileRoute } from "@tanstack/react-router";
+import { ArrayElement } from "~/typescript";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
@@ -11,20 +12,42 @@ export const Route = createFileRoute("/")({
 function Component() {
   const data = Route.useLoaderData();
 
+  const archetypeToColor = data
+    .map(({ meta }) => [
+      ...Object.keys(meta.juniors),
+      ...Object.keys(meta.seniors),
+    ])
+    .flat()
+    .reduce(
+      (acc, archetype) => ({
+        ...acc,
+        [archetype]: getRandomBgColor().backgroundColor,
+      }),
+      {} as Record<string, string>
+    );
+
+  const divisions: (keyof ArrayElement<typeof data>["meta"])[] = [
+    "seniors",
+    "juniors",
+  ];
+
   return (
     <div className="flex flex-col gap-12">
-      {data.map(({ tournament, meta }) => (
-        <div key={tournament.url}>
-          <h1 className="text-2xl font-bold mb-4">{tournament.title}</h1>
-          <div className="flex gap-12 flex-wrap">
-            <div className="w-full max-w-[400px]">
-              <h2 className="text-xl font-bold mb-2">Juniors</h2>
-              <MetaShare meta={meta.juniors} />
-            </div>
-            <div className="w-full max-w-[400px]">
-              <h2 className="text-xl font-bold mb-2">Seniors</h2>
-              <MetaShare meta={meta.seniors} />
-            </div>
+      {divisions.map((division) => (
+        <div>
+          <h1 className="text-2xl font-bold mb-4 capitalize">{division}</h1>
+          <div className="flex gap-4 flex-wrap">
+            {data.map(({ tournament, meta }) => (
+              <div key={tournament.url} className="w-full max-w-[330px]">
+                <h2 className="text-xl font-bold mb-2">
+                  {shortenTitle(tournament.title)}
+                </h2>
+                <MetaShare
+                  meta={meta[division]}
+                  archetypeToColor={archetypeToColor}
+                />
+              </div>
+            ))}
           </div>
         </div>
       ))}
@@ -32,7 +55,13 @@ function Component() {
   );
 }
 
-function MetaShare({ meta }: { meta: Record<string, number | undefined> }) {
+function MetaShare({
+  meta,
+  archetypeToColor,
+}: {
+  meta: Record<string, number | undefined>;
+  archetypeToColor: Record<string, string>;
+}) {
   const total = Object.values(meta).reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
   return (
     <div className="flex flex-col gap-0.25">
@@ -46,7 +75,7 @@ function MetaShare({ meta }: { meta: Record<string, number | undefined> }) {
                 <div
                   className="px-2 p-0.5"
                   style={{
-                    ...getRandomBgColor(),
+                    backgroundColor: archetypeToColor[deck],
                     width: `${percentage}%`,
                   }}
                 />
@@ -70,4 +99,10 @@ function getRandomBgColor() {
   }
   const contrast = chroma(color).luminance() > 0.5 ? "#000" : "#FFF";
   return { backgroundColor: color, color: contrast };
+}
+
+function shortenTitle(title: string) {
+  return title
+    .replace("Pokémon TCG Regional Championship", "")
+    .replace("Pokémon TCG International Championship", "");
 }
